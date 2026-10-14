@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>Iniciar sesion</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="card">
+    <div class="brand" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+    </div>
+    <h1 id="title">Iniciar sesion</h1>
+    <p id="subtitle" class="subtitle">Ingresa tus datos para continuar</p>
+
+    <form id="auth-form" novalidate>
+      <div id="message" class="message" role="alert" aria-live="assertive"></div>
+
+      <div id="name-field" class="collapsible" aria-hidden="true">
+        <div>
+          <div class="field">
+            <label for="name">Nombre</label>
+            <input type="text" id="name" autocomplete="name" placeholder="Tu nombre" disabled aria-describedby="name-error">
+            <p id="name-error" class="field-error"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" autocomplete="email" placeholder="tu@correo.com" required aria-describedby="email-error">
+        <p id="email-error" class="field-error"></p>
+      </div>
+
+      <div class="field">
+        <label for="password">Contrasena</label>
+        <div class="input-wrap">
+          <input type="password" id="password" autocomplete="current-password" placeholder="Minimo 6 caracteres" minlength="6" required aria-describedby="password-hint password-error">
+          <button type="button" id="toggle-password" class="icon-btn" aria-label="Mostrar contrasena" aria-pressed="false">
+            <svg id="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <p id="password-hint" class="hint">Minimo 6 caracteres.</p>
+        <p id="password-error" class="field-error"></p>
+      </div>
+
+      <button type="submit" id="submit" class="btn">
+        <span class="spinner" aria-hidden="true"></span>
+        <span id="submit-label">Entrar</span>
+      </button>
+    </form>
+
+    <p class="toggle">
+      <span id="toggle-text">No tienes cuenta?</span>
+      <button type="button" id="toggle" class="link">Registrate</button>
+    </p>
+  </main>
+  <script src="login.js"></script>
+</body>
+</html>

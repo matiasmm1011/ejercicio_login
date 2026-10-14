@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>Mi perfil</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="card profile skeleton" id="card" aria-busy="true">
+    <div class="avatar" id="avatar" aria-hidden="true"></div>
+    <h1 id="name">Cargando...</h1>
+    <p id="email" class="email"></p>
+    <dl class="details">
+      <dt>Miembro desde</dt>
+      <dd id="since">-</dd>
+    </dl>
+    <div id="message" class="message error" role="alert" aria-live="assertive"></div>
+    <a href="dashboard.html" class="btn secondary">Volver al dashboard</a>
+    <button type="button" id="logout" class="btn secondary">Cerrar sesion</button>
+  </main>
+  <script>
+    (function () {
+      var card = document.getElementById('card');
+      var avatar = document.getElementById('avatar');
+      var nameEl = document.getElementById('name');
+      var emailEl = document.getElementById('email');
+      var sinceEl = document.getElementById('since');
+      var message = document.getElementById('message');
+
+      function toLogin() {
+        localStorage.removeItem('token');
+        window.location.href = 'login.html';
+      }
+
+      function initials(name) {
+        var parts = String(name || '').trim().split(/\s+/).filter(Boolean);
+        if (!parts.length) { return '?'; }
+        var last = parts.length > 1 ? parts[parts.length - 1].charAt(0) : '';
+        return (parts[0].charAt(0) + last).toUpperCase();
+      }
+
+      function formatDate(value) {
+        // SQLite guarda "YYYY-MM-DD HH:MM:SS" en UTC
+        var d = new Date(String(value || '').replace(' ', 'T') + 'Z');
+        return isNaN(d.getTime()) ? '-' : d.toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' });
+      }
+
+      document.getElementById('logout').addEventListener('click', toLogin);
+
+      var token = localStorage.getItem('token');
+      if (!token) { window.location.href = 'login.html'; return; }
+
+      fetch('/api/auth/me', { headers: { Authorization: 'Bearer ' + token } })
+        .then(function (res) {
+          if (res.status === 401) { toLogin(); return null; }
+          return res.json().then(function (data) {
+            if (!res.ok) { throw new Error(data.error || 'Error inesperado'); }
+            return data;
+          });
+        })
+        .then(function (data) {
+          if (!data) { return; }
+          card.classList.remove('skeleton');
+          card.setAttribute('aria-busy', 'false');
+          avatar.textContent = initials(data.user.name);
+          nameEl.textContent = data.user.name;
+          emailEl.textContent = data.user.email || '';
+          sinceEl.textContent = formatDate(data.user.createdAt);
+        })
+        .catch(function (err) {
+          card.classList.remove('skeleton');
+          card.setAttribute('aria-busy', 'false');
+          nameEl.textContent = 'Algo salio mal';
+          message.textContent = err instanceof TypeError
+            ? 'No se pudo conectar con el servidor.'
+            : (err.message || 'Error inesperado');
+        });
+    })();
+  </script>
+</body>
+</html>

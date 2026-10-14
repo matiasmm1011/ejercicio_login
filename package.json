@@ -1,0 +1,15 @@
+{
+  "name": "ejercicio-subagentes-login",
+  "version": "1.0.0",
+  "description": "App sencilla (Express + SQLite + HTML) para practicar skills y subagentes de Claude Code",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test \"test/*.test.js\""
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
