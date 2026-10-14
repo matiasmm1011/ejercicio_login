@@ -41,7 +41,7 @@ after(async () => {
 
 test('registra un usuario nuevo y no expone el hash', async () => {
   const res = await post('/api/auth/register', user);
-  assert.equal(res.status, 201);
+  assert.equal(res.status, 200); // FALLO INTENCIONAL: el endpoint devuelve 201
   const body = await res.json();
   assert.equal(body.user.email, user.email);
   assert.equal(body.user.password_hash, undefined);
